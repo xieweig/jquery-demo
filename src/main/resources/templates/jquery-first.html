@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <title>急急急</title>
+</head>
+<body>
+<div>
+    <div>请依次填写考试基本信息 考试班级 考试科目 考试场次，之后点击按钮开始考试，学生将会看到考试题目</div>
+    <div>please filled with  basic info : grade   subject  MT-times ,then click the button to start exam </div>
+    <div class="form-group">
+        <select name="grade" id="grade" class="form-control input-lg"
+                required="true" >
+            <option th:each="grade : ${grades}" th:text="${grade}" th:value="${grade}"></option>
+        </select>
+    </div>
+    <div class="form-group">
+        <select name="subject" id="subject" class="form-control input-lg"
+                required="true">
+            <option th:each="subject : ${subjects}" th:text="${subject}"  th:value="${subject}"></option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="number" name="times" id="times" class="form-control input-lg"
+               placeholder="请输入考试场次times" required="true"/>
+    </div>
+
+    <button id="openTest" type="button" onclick="openTest()" class="btn btn-primary pull-right" > 提交考试信息并开放考试 ready and open exam<p id="isOpen">未开放states: closed</p></button>
+
+    <script type="application/javascript" th:inline="javascript">
+        var openTest = function () {
+            var grade = $("#grade").val();
+            var subject = $("#subject").val();
+            var times = $("#times").val();
+            var classInfo = {
+                "grade": grade,
+                "subject": subject,
+                "times": times
+            };
+            var url = "/trainer/classInfoAndOpenTest";
+
+            $.ajax({
+                type: 'post',
+                url: url,
+                contentType: 'application/json',
+
+                data: JSON.stringify(classInfo),
+
+                dataType: 'json',
+
+                beforeSend: function(){
+                    //开始请求之前
+                    console.log(classInfo);
+                    console.log(JSON.stringify(classInfo));
+
+                },
+                success: function (data) {
+                    console.log("back",data);
+                    $("#isOpen").text("已开放states: opened;if wanna close; Reupload");
+                    $("#openTest").attr("disabled",true);
+                    //$("#exportResults").attr("disabled",false);
+
+
+                }
+            });
+
+        }
+
+
+    </script>
+
+</div>
+</body>
+</html>

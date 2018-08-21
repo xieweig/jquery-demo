@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <title> 尝试 </title>
+</head>
+<body>
+<div>
+<select id="01">
+    <option value="111">牛奶</option>
+    <option value="222">香蕉</option>
+    <option value="333">咖啡</option>
+</select>
+    <input id ="02" type="number"/>
+    <div>
+        <input name="first" type="radio" value="123"/>123s
+        <input name="first" type="radio" value="321"/>321s
+        <input name="first" type="radio" value="121"/>121s
+        <input name="second" type="radio" value="666"/>666d
+        <input name="second" type="radio" value="777"/>777d
+    </div>
+    <div>
+        <input name="third" type="checkbox" value="abc">abc..
+        <input name="third" type="checkbox" value="def">def..
+    </div>
+    <button onclick="submit()">提交</button>
+<script type="application/javascript">
+    var submit = function () {
+
+
+            var cargo = $("#01").val();
+            var number = $("#02").val();
+            var first_radio = $('input:radio[name="first"]:checked').val();
+            var second_radio = $('input[name="second"]:checked').val();
+            var third_checkbox_list=$('input[name="third"]:checked');
+            var third_list=[];
+            third_checkbox_list.each(function () {
+                third_list.push($(this).val());
+            });
+
+            var total = {
+                cargo : cargo,
+                number : number,
+                first :first_radio,
+                second :second_radio,
+                third :third_list,
+                third_remarks: third_checkbox_list.length
+            };
+
+            console.log(total);
+            console.log("rtmp://10.10.2.42/rtmp/Inku");
+            console.log(JSON.stringify(total));
+
+            $.ajax({
+                type: 'post',
+                url: 'localhost:8080/postTry',
+                contentType: 'application/json',
+
+                data: JSON.stringify(total),
+
+                dataType: 'json',
+
+                beforeSend: function(){
+
+                    console.log("before"+JSON.stringify(total));
+
+                },
+                success: function (data) {
+                    /*console.log(data);
+                    alert(data["message"] +" 考试得分 ："+ data["totalScore"] +" 具体详情F12");
+                    if (data["totalScore"] == null){
+                        document.getElementById("student-finish").disabled = false;
+                    }*/
+
+                }
+            });
+    }
+
+</script>
+
+
+</body>
+</html>
